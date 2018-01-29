@@ -76,6 +76,8 @@ public:
 	}
 	using AudioStream::release;
 	virtual void update(void);
+	// returns true if the envelope is currently playing.
+	bool isPlaying();
 private:
 	uint16_t milliseconds2count(float milliseconds) {
 		if (milliseconds < 0.0) milliseconds = 0.0;
