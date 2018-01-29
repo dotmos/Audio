@@ -180,7 +180,7 @@ void AudioEffectEnvelope::update(void)
 }
 
 // returns true if the envelope is currently playing.
-bool AudioEffectEnvelope:isPlaying(){
+bool AudioEffectEnvelope::isPlaying(){
 	if(state == STATE_IDLE || state == STATE_DELAY){
 		return true;
 	} else {

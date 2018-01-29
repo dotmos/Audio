@@ -1,7 +1,7 @@
 Changes/Additions to original code
 ----------------------------------
-* Added FM version of waveform (waveformModulated)
-* Added isPlaying() to effect_envelope to check if an envelope is currently playing.
+* Added FM version of AudioSynthWaveform: AudioSynthWaveformModulated
+* Added isPlaying() to AudioEffectEnvelope to check if an envelope is currently playing.
 
 Teensy Audio Library
 ====================
