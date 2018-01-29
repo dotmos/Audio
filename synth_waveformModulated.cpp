@@ -70,7 +70,7 @@ void AudioSynthWaveformModulated::update(void)
 				
 				// phase and incr are both unsigned 32-bit fractions
 				mod = modinput->data[i];
-				tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);;
+				tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);
 				// If tone_phase has overflowed, truncate the top bit 
 				if(tone_phase & 0x80000000)tone_phase &= 0x7fffffff;
 			}
@@ -100,19 +100,38 @@ void AudioSynthWaveformModulated::update(void)
 		release(block);
 		return;
       }
-      // len = 256
-      for (int i = 0; i < AUDIO_BLOCK_SAMPLES;i++) {
-		index = tone_phase >> 23;
-		val1 = *(arbdata + index);
-		val2 = *(arbdata + ((index + 1) & 255));
-		scale = (tone_phase >> 7) & 0xFFFF;
-		val2 *= scale;
-		val1 *= 0xFFFF - scale;
-		val3 = (val1 + val2) >> 16;
-		*bp++ = (short)((val3 * tone_amp) >> 15);
-		tone_phase += tone_incr;
-		tone_phase &= 0x7fffffff;
-      }
+	  
+	  if(modinput){
+		// len = 256
+		for (int i = 0; i < AUDIO_BLOCK_SAMPLES;i++) {
+			index = tone_phase >> 23;
+			val1 = *(arbdata + index);
+			val2 = *(arbdata + ((index + 1) & 255));
+			scale = (tone_phase >> 7) & 0xFFFF;
+			val2 *= scale;
+			val1 *= 0xFFFF - scale;
+			val3 = (val1 + val2) >> 16;
+			*bp++ = (short)((val3 * tone_amp) >> 15);
+			
+			mod = modinput->data[i];
+			tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);
+			tone_phase &= 0x7fffffff;
+		}  
+	  } else {
+		// len = 256
+		for (int i = 0; i < AUDIO_BLOCK_SAMPLES;i++) {
+			index = tone_phase >> 23;
+			val1 = *(arbdata + index);
+			val2 = *(arbdata + ((index + 1) & 255));
+			scale = (tone_phase >> 7) & 0xFFFF;
+			val2 *= scale;
+			val1 *= 0xFFFF - scale;
+			val3 = (val1 + val2) >> 16;
+			*bp++ = (short)((val3 * tone_amp) >> 15);
+			tone_phase += tone_incr;
+			tone_phase &= 0x7fffffff;
+		}
+	  }
       break;
       
     case WAVEFORM_SQUARE:
@@ -120,9 +139,9 @@ void AudioSynthWaveformModulated::update(void)
 			for(int i = 0;i < AUDIO_BLOCK_SAMPLES;i++) {
 				if(tone_phase & 0x40000000)*bp++ = -tone_amp;
 				else *bp++ = tone_amp;
-				// phase and incr are both unsigned 32-bit fractions
+				
 				mod = modinput->data[i];
-				tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);;
+				tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);
 			}
 			release(modinput);
 		} else {
@@ -140,9 +159,9 @@ void AudioSynthWaveformModulated::update(void)
 		if(modinput){
 			for(int i = 0;i < AUDIO_BLOCK_SAMPLES;i++) {
 				*bp++ = ((short)(tone_phase>>15)*tone_amp) >> 15;
-				// phase and incr are both unsigned 32-bit fractions
+				
 				mod = modinput->data[i];
-				tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);;
+				tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);
 			}
 			release(modinput);
 		} else {
@@ -158,9 +177,9 @@ void AudioSynthWaveformModulated::update(void)
       if(modinput){
 		for(int i = 0;i < AUDIO_BLOCK_SAMPLES;i++) {
 			*bp++ = ((short)(tone_phase>>15)*tone_amp) >> 15;
-			// phase and incr are both unsigned 32-bit fractions
+			
 			mod = modinput->data[i];
-			tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);;
+			tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);
 		}
 		release(modinput);
 	  } else {
@@ -191,7 +210,7 @@ void AudioSynthWaveformModulated::update(void)
 			}
 			*bp++ = ((short)(mag>>17)*tmp_amp) >> 15;
 			mod = modinput->data[i];
-			tone_phase += 2*tone_incr + (multiply_32x32_rshift32(2*tone_incr, mod << 16) << 1);;
+			tone_phase += 2*tone_incr + (multiply_32x32_rshift32(2*tone_incr, mod << 16) << 1);
 		  }
 		  release(modinput);
 	  } else {
@@ -222,7 +241,7 @@ void AudioSynthWaveformModulated::update(void)
 			if(tone_phase < tone_width)*bp++ = -tone_amp;
 			else *bp++ = tone_amp;
 			mod = modinput->data[i];
-			tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);;
+			tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);
 		}
 		release(modinput);
 	  } else {
@@ -242,7 +261,7 @@ void AudioSynthWaveformModulated::update(void)
 			}
 			*bp++ = sample;
 			mod = modinput->data[i];
-			tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);;
+			tone_phase += tone_incr + (multiply_32x32_rshift32(tone_incr, mod << 16) << 1);
 		}
 		release(modinput);		
 	  } else {
