@@ -35,7 +35,13 @@ void AudioEffectWaveshaper::shape(float* waveshape, int length)
 {
   // length must be bigger than 1 and equal to a power of two + 1
   // anything else means we don't continue
-  if(!waveshape || length < 2 || length > 32769 || ((length - 1) & (length - 2))) return;
+  if(!waveshape || length < 2 || length > 32769 || ((length - 1) & (length - 2))){
+	//delete current waveshape if there is any.
+	if(this->waveshape) {
+		delete [] this->waveshape;
+	}
+	return;
+  }
 
   if(this->waveshape) {
     delete [] this->waveshape;
@@ -54,7 +60,18 @@ void AudioEffectWaveshaper::shape(float* waveshape, int length)
 
 void AudioEffectWaveshaper::update(void)
 {
-  if(!waveshape) return;
+	
+	
+	
+  //pass thru if no waveshape defined
+  if(!waveshape){
+	audio_block_t *block_;
+	block_ = receiveReadOnly();
+	if (!block_) return;
+	transmit(block_);
+	release(block_);
+	return;
+  }
 
   audio_block_t *block;
   block = receiveWritable();

@@ -48,6 +48,8 @@ extern const int16_t AudioWaveformSine[257];
 #define WAVEFORM_PULSE     5
 #define WAVEFORM_SAWTOOTH_REVERSE 6
 #define WAVEFORM_SAMPLE_HOLD 7
+#define WAVEFORM_HALFSINE 15
+#define WAVEFORM_ABSSINE 16
 
 // todo: remove these...
 #define TONE_TYPE_SINE     0

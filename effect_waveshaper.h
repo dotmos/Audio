@@ -33,6 +33,7 @@ class AudioEffectWaveshaper : public AudioStream
   public:
     AudioEffectWaveshaper(void): AudioStream(1, inputQueueArray) {}
     ~AudioEffectWaveshaper();
+	using AudioStream::release;
     virtual void update(void);
     void shape(float* waveshape, int length);
   private:
