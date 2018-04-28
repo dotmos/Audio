@@ -24,6 +24,7 @@
  * THE SOFTWARE.
  */
 
+#include <Arduino.h>
 #include "effect_envelope.h"
 
 #define STATE_IDLE	0
@@ -186,5 +187,19 @@ bool AudioEffectEnvelope::isPlaying(){
 	} else {
 		return true;
 	}
+}
+
+bool AudioEffectEnvelope::isActive()
+{
+	uint8_t current_state = *(volatile uint8_t *)&state;
+	if (current_state == STATE_IDLE) return false;
+	return true;
+}
+
+bool AudioEffectEnvelope::isSustain()
+{
+	uint8_t current_state = *(volatile uint8_t *)&state;
+	if (current_state == STATE_SUSTAIN) return true;
+	return false;
 }
 
