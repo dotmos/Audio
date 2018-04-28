@@ -112,7 +112,6 @@
 #include "synth_tonesweep.h"
 #include "synth_sine.h"
 #include "synth_waveform.h"
-#include "synth_waveformModulated.h"
 #include "synth_dc.h"
 #include "synth_whitenoise.h"
 #include "synth_pinknoise.h"

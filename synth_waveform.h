@@ -162,9 +162,11 @@ public:
 		tone_offset = n * 32767.0;
 	}
 	void begin(short t_type) {
+		phase_accumulator = 0;
 		tone_type = t_type;
 	}
 	void begin(float t_amp, float t_freq, short t_type) {
+		phase_accumulator = 0;
 		amplitude(t_amp);
 		frequency(t_freq);
 		tone_type = t_type;
